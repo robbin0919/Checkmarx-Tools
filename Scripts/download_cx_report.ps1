@@ -32,24 +32,65 @@
     .\download_cx_report.ps1 -CxServer "https://cx.example.com" -Username "admin" -Password "123456" -ProjectName "MyProject"
 #>
 
+[CmdletBinding()]
 param (
-    [Parameter(Mandatory=$true)]
     [string]$CxServer,
 
-    [Parameter(Mandatory=$true)]
     [string]$Username,
 
-    [Parameter(Mandatory=$true)]
     [string]$Password,
 
-    [Parameter(Mandatory=$true)]
     [string]$ProjectName,
 
     [ValidateSet("PDF", "XML", "CSV", "RTF")]
     [string]$ReportType = "PDF",
 
-    [string]$OutputPath = ".\CxReport"
+    [string]$OutputPath = ".\CxReport",
+
+    [switch]$Help,
+
+    [Parameter(ValueFromRemainingArguments=$true)]
+    $RemainingArgs
 )
+
+function Show-Usage {
+    Write-Host "用法 (Usage):" -ForegroundColor Cyan
+    Write-Host "    .\download_cx_report.ps1 -CxServer <URL> -Username <User> -Password <Pass> -ProjectName <Project> [-ReportType <Type>] [-OutputPath <Path>]"
+    Write-Host ""
+    Write-Host "參數說明:"
+    Write-Host "    -CxServer      (必要) Checkmarx 伺服器網址 (例如 https://cx-server.local)"
+    Write-Host "    -Username      (必要) 使用者帳號"
+    Write-Host "    -Password      (必要) 使用者密碼"
+    Write-Host "    -ProjectName   (必要) 要下載報告的專案名稱 (支援模糊搜尋)"
+    Write-Host "    -ReportType    (選填) 報告格式: PDF, XML, CSV, RTF (預設: PDF)"
+    Write-Host "    -OutputPath    (選填) 報告儲存路徑 (預設: .\CxReport)"
+    Write-Host "    -Help          顯示此說明"
+    Write-Host ""
+}
+
+# 1. 檢查是否要求顯示說明
+if ($Help) {
+    Show-Usage
+    exit 0
+}
+
+# 2. 檢查是否有未識別的多餘參數
+if ($null -ne $RemainingArgs -and $RemainingArgs.Count -gt 0) {
+    Write-Host ("錯誤：偵測到未識別的參數或值: {0}" -f ($RemainingArgs -join ", ")) -ForegroundColor Red
+    Show-Usage
+    exit 1
+}
+
+# 3. 檢查必要參數
+if ([string]::IsNullOrWhiteSpace($CxServer) -or 
+    [string]::IsNullOrWhiteSpace($Username) -or 
+    [string]::IsNullOrWhiteSpace($Password) -or 
+    [string]::IsNullOrWhiteSpace($ProjectName)) {
+    Write-Host "錯誤：缺少必要參數。" -ForegroundColor Red
+    Write-Host ""
+    Show-Usage
+    exit 1
+}
 
 # --- 忽略 SSL 憑證錯誤 (僅限地端版自簽憑證環境) ---
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
