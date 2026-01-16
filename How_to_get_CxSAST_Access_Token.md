@@ -57,7 +57,37 @@ curl -k -X POST "https://<你的伺服器>/cxrestapi/auth/identity/connect/token
 curl -k -X POST "https://<你的伺服器>/cxrestapi/auth/identity/connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=password" -d "username=<使用者名稱>" -d "password=<密碼>" -d "scope=sast_rest_api" -d "client_id=resource_owner_client" -d "client_secret=014DF517-39D1-4453-B7B3-9930C563F27B"
 ```
 
-### 方法 B：使用 Python (自動化腳本)
+### 方法 B：使用 PowerShell (Windows 推薦)
+
+PowerShell 使用 `Invoke-RestMethod` 可以直接將回應解析為物件，非常適合 Windows 環境下的自動化。
+
+```powershell
+# 1. 設定變數
+$baseUrl = "https://<你的伺服器>"
+$tokenUrl = "$baseUrl/cxrestapi/auth/identity/connect/token"
+
+# 2. 準備酬載 (Body)
+$body = @{
+    grant_type    = "password"
+    username      = "<使用者名稱>"
+    password      = "<密碼>"
+    scope         = "sast_rest_api"
+    client_id     = "resource_owner_client"
+    client_secret = "014DF517-39D1-4453-B7B3-9930C563F27B"
+}
+
+# 3. 忽略 SSL 驗證 (僅限地端版自簽憑證環境)
+[System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
+
+# 4. 發送請求
+$response = Invoke-RestMethod -Uri $tokenUrl -Method Post -ContentType "application/x-www-form-urlencoded" -Body $body
+
+# 5. 取得 Token
+$accessToken = $response.access_token
+Write-Host "Access Token: $accessToken"
+```
+
+### 方法 C：使用 Python (自動化腳本)
 
 推薦在開發整合工具時使用 Python 的 `requests` 程式庫：
 
