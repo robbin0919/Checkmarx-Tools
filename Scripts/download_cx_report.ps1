@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     自動下載 Checkmarx SAST 掃描報告的 PowerShell 腳本。
 
