@@ -109,7 +109,7 @@ try {
         password      = $Password
         scope         = "sast_rest_api"
         client_id     = "resource_owner_client"
-        client_secret = "014DF517-39D1-4453-B7B3-9930C563F27B"
+        client_secret = "014DF517-39D1-4453-B7B3-9930C563627C"
     }
 
     $authResponse = Invoke-RestMethod -Uri $tokenUrl -Method Post -ContentType "application/x-www-form-urlencoded" -Body $authBody
