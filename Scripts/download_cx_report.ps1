@@ -193,5 +193,13 @@ try {
 
 } catch {
     Log-Error "發生錯誤: $_"
+    if ($_.Exception.Response) {
+        $stream = $_.Exception.Response.GetResponseStream()
+        if ($stream) {
+            $reader = New-Object System.IO.StreamReader($stream)
+            $responseBody = $reader.ReadToEnd()
+            Log-Error "伺服器回應詳細內容 (Server Response Details): $responseBody"
+        }
+    }
     exit 1
 }
