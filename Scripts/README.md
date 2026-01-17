@@ -6,6 +6,21 @@
 
 這是一個 PowerShell 腳本，用於自動下載指定專案最新的 SAST 掃描報告。
 
+### 執行方式
+
+您可以使用 PowerShell 直接執行，或使用提供的批次檔 wrapper：
+
+**方式 1：PowerShell 直接執行**
+```powershell
+.\download_cx_report.ps1 ...
+```
+
+**方式 2：使用 Batch 檔 (CMD)**
+```batch
+.\run_download_cx_report.bat ...
+```
+*(此批次檔會自動設定 ExecutionPolicy Bypass，方便在受限環境下執行)*
+
 ### 功能
 *   **自動登入**：自動處理 OAuth2 驗證流程，取得 Access Token。
 *   **智慧搜尋**：根據專案名稱搜尋 Project ID。
