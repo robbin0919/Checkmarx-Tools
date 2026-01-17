@@ -45,7 +45,7 @@ Checkmarx 支援類似 Personal Access Tokens (PAT) 的功能，但具體實作�
 ```bash
 curl -X POST "https://<CX_SERVER>/cxrestapi/auth/identity/connect/token" \
      -H "Content-Type: application/x-www-form-urlencoded" \
-     -d "username=<USER>&password=<PASS>&grant_type=password&scope=sast_rest_api&client_id=resource_owner_client&client_secret=014DF517-39D1-4453-B7B3-9930C563F27B"
+     -d "username=<USER>&password=<PASS>&grant_type=password&scope=sast_rest_api&client_id=resource_owner_client&client_secret=014DF517-39D1-4453-B7B3-9930C563627C"
 ```
 *(注意：client_secret 通常為固定值，請參考官方文件確認)*
 

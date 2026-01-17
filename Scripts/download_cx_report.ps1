@@ -47,6 +47,8 @@ param (
 
     [string]$OutputPath = ".\CxReport",
 
+    [string]$ReportFileName,
+
     [switch]$Help,
 
     [Parameter(ValueFromRemainingArguments=$true)]
@@ -55,7 +57,7 @@ param (
 
 function Show-Usage {
     Write-Host "用法 (Usage):" -ForegroundColor Cyan
-    Write-Host "    .\download_cx_report.ps1 -CxServer <URL> -Username <User> -Password <Pass> -ProjectName <Project> [-ReportType <Type>] [-OutputPath <Path>]"
+    Write-Host "    .\download_cx_report.ps1 -CxServer <URL> -Username <User> -Password <Pass> -ProjectName <Project> [-ReportType <Type>] [-OutputPath <Path>] [-ReportFileName <Name>]"
     Write-Host ""
     Write-Host "參數說明:"
     Write-Host "    -CxServer      (必要) Checkmarx 伺服器網址 (例如 https://cx-server.local)"
@@ -64,6 +66,7 @@ function Show-Usage {
     Write-Host "    -ProjectName   (必要) 要下載報告的專案名稱 (支援模糊搜尋)"
     Write-Host "    -ReportType    (選填) 報告格式: PDF, XML, CSV, RTF (預設: PDF)"
     Write-Host "    -OutputPath    (選填) 報告儲存路徑 (預設: .\CxReport)"
+    Write-Host "    -ReportFileName (選填) 指定輸出的檔案名稱 (預設: 自動產生 {Project}_{ScanID}_{Time})"
     Write-Host "    -Help          顯示此說明"
     Write-Host ""
 }
@@ -180,9 +183,19 @@ try {
         New-Item -ItemType Directory -Force -Path $OutputPath | Out-Null
     }
     
-    # 檔名格式: ProjectName_ScanID_TimeStamp.pdf
-    $timeStamp = Get-Date -Format "yyyyMMdd-HHmm"
-    $fileName = "$($targetProject.name)_Scan$($scanId)_$timeStamp.$($ReportType.ToLower())"
+    if (-not [string]::IsNullOrWhiteSpace($ReportFileName)) {
+        # 若使用者有指定檔名，檢查是否包含副檔名，若無則自動補上
+        $ext = "." + $ReportType.ToLower()
+        if (-not $ReportFileName.EndsWith($ext, [System.StringComparison]::OrdinalIgnoreCase)) {
+            $ReportFileName += $ext
+        }
+        $fileName = $ReportFileName
+    } else {
+        # 預設檔名格式: ProjectName_ScanID_TimeStamp.pdf
+        $timeStamp = Get-Date -Format "yyyyMMdd-HHmm"
+        $fileName = "$($targetProject.name)_Scan$($scanId)_$timeStamp.$($ReportType.ToLower())"
+    }
+    
     $fullPath = Join-Path $OutputPath $fileName
 
     $downloadUrl = "$CxServer/cxrestapi/reports/sastScan/$reportId"

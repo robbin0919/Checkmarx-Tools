@@ -22,6 +22,7 @@
 | `-ProjectName` | 專案名稱 (支援模糊搜尋) | 是 | 無 |
 | `-ReportType` | 報告格式 (PDF, XML, CSV, RTF) | 否 | PDF |
 | `-OutputPath` | 檔案儲存路徑 | 否 | `.\CxReport` |
+| `-ReportFileName` | 指定輸出的檔案名稱 | 否 | 自動產生 ({Project}_{ScanID}_{Time}) |
 
 ### 使用範例
 
@@ -31,6 +32,18 @@
                          -Username "admin" `
                          -Password "123456" `
                          -ProjectName "MyWebProject"
+```
+
+**自訂檔名與輸出格式**
+```powershell
+.\download_cx_report.ps1 -CxServer "https://cx-server.local" `
+                         -Username "admin" `
+                         -Password "123456" `
+                         -ProjectName "MyWebProject" `
+                         -ReportType "PDF" `
+                         -OutputPath ".\Reports" `
+                         -ReportFileName "MyCustomReport"
+# 結果檔案: .\Reports\MyCustomReport.pdf (副檔名會自動補上)
 ```
 
 **下載 XML 報告至指定資料夾**
