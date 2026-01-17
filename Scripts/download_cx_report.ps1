@@ -162,7 +162,7 @@ try {
         $statusResponse = Invoke-RestMethod -Uri $statusUrl -Method Get -Headers $headers
         $status = $statusResponse.status.value
         Log-Info "報告狀態: $status..."
-    } while ($status -in @("InProcess", "Created"))
+    } while ($status -notin @("Created", "Failed"))
 
     if ($status -ne "Created") {
         # 注意: API 回傳 "Created" 代表完成，或是部分版本回傳 "Finished"
