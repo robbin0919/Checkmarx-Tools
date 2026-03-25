@@ -12,31 +12,33 @@
 
 ## 使用步驟
 
-### 1. 修改配置資訊
-
-在執行之前，您必須修改 `Program.cs` 中的配置區塊：
+### 1. (選填) 修改預設配置
 
 檔案路徑：`checkmarx/Automation/Scripts/CxQueryExporter/Program.cs`
 
-```csharp
-// --- 配置區 ---
-private const string CxServer = "https://your-checkmarx-server"; // 修改為您的 Cx 伺服器網址
-private const string Username = "your_username";               // 修改為您的帳號
-private const string Password = "your_password";               // 修改為您的密碼
-private const string OutputDir = "./CxQueries_Export";         // 匯出檔案的儲存目錄
-```
+若您不希望在執行時提供參數，可以預先修改 `_cxServer`、`_username` 等變數。
 
-### 2. 編譯與執行
+### 2. 透過 CLI 執行 (推薦)
 
-在終端機（Terminal 或 PowerShell）中進入專案目錄，執行以下指令：
+您可以直接在執行時提供參數，這非常適合整合進 CI/CD 或自動化腳本。
 
 ```bash
 # 進入專案目錄
 cd checkmarx/Automation/Scripts/CxQueryExporter
 
-# 執行程式
-dotnet run
+# 顯示幫助資訊
+dotnet run -- --help
+
+# 完整匯出指令範例
+dotnet run -- -s https://cx.example.com -u admin -p 123456 -o ./CxQueries_Export
 ```
+
+**參數選項：**
+*   `-s, --server <URL>`：Checkmarx 伺服器網址
+*   `-u, --user <Username>`：使用者帳號
+*   `-p, --pass <Password>`：使用者密碼
+*   `-o, --output <Dir>`：匯出儲存目錄 (預設: ./CxQueries_Export)
+*   `-h, --help`：顯示幫助訊息
 
 ### 3. 查看結果
 
