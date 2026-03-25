@@ -129,7 +129,7 @@ class Program
                 new SpinnerColumn(),
             })
             .StartAsync(async ctx => {
-                var task = ctx.AddTask("[green]匯出 CxQL 查詢腳本[/]", total: allQueries.Count);
+                var task = ctx.AddTask("[green]匯出 CxQL 查詢腳本[/]", maxValue: allQueries.Count);
                 
                 foreach (var q in allQueries)
                 {

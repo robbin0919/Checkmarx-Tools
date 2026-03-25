@@ -2,6 +2,12 @@
 
 此專案的所有顯著變更都將記錄在此檔案中。
 
+## [1.2.1] - 2026-03-26
+
+### 修正內容
+- 修復 `System.Text.Json` (v8.0.0) 的高嚴重性安全性漏洞 (GHSA-8g4q-xg66-9fp4, GHSA-hh2w-p6rv-4g7w)，升級至 **v8.0.5**。
+- 修復 `Program.cs` 中的編譯錯誤：將 `Spectre.Console` 的 `AddTask` 參數 `total` 修正為正確的 `maxValue`。
+
 ## [1.2.0] - 2026-03-26
 
 ### 新增內容
